@@ -79,4 +79,34 @@ yargs.command({
     }
 })
 
+yargs.command({
+    command: 'read',
+    describe: 'Read a note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: function (argv) {
+        // saving in json file
+        const fs = require('fs');
+        // create notes.json if not exists
+        if (!fs.existsSync('notes.json')) {
+            fs.writeFileSync('notes.json', '[]');
+        }
+        // read notes.json
+        const notes = JSON.parse(fs.readFileSync('notes.json'));
+        // print note
+        const note = notes.find(note => note.title === argv.title);
+        if (note) {
+            console.log(note.title);
+            console.log(note.body);
+        } else {
+            console.log('Note not found');
+        }
+    }
+})
+
 yargs.parse();
