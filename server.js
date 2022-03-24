@@ -62,4 +62,21 @@ yargs.command({
     }
 })
 
+yargs.command({
+    command: 'list',
+    describe: 'List all notes',
+    handler: function () {
+        // saving in json file
+        const fs = require('fs');
+        // create notes.json if not exists
+        if (!fs.existsSync('notes.json')) {
+            fs.writeFileSync('notes.json', '[]');
+        }
+        // read notes.json
+        const notes = JSON.parse(fs.readFileSync('notes.json'));
+        // print notes
+        notes.forEach(note => console.log(note.title));
+    }
+})
+
 yargs.parse();
